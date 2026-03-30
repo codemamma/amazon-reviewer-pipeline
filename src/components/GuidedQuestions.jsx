@@ -48,43 +48,34 @@ export default function GuidedQuestions({ email, onNext }) {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          Tell us about your experience
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 mb-8">
-          Your answers will help us craft an authentic review
-        </p>
+    <div className="card card-wide">
+      <h2 className="heading-lg">Tell us about your experience</h2>
+      <p className="text-muted">Your answers will help us craft an authentic review</p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {questions.map((question, index) => (
-            <div key={question.id}>
-              <label htmlFor={question.id} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {index + 1}. {question.label}
-              </label>
-              <textarea
-                id={question.id}
-                value={answers[question.id]}
-                onChange={(e) => handleChange(question.id, e.target.value)}
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white resize-none transition-colors"
-                placeholder={question.placeholder}
-              />
-              {errors[question.id] && (
-                <p className="mt-2 text-sm text-red-600 dark:text-red-400">{errors[question.id]}</p>
-              )}
-            </div>
-          ))}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {questions.map((question, index) => (
+          <div key={question.id} className="form-group">
+            <label htmlFor={question.id} className="form-label">
+              {index + 1}. {question.label}
+            </label>
+            <textarea
+              id={question.id}
+              value={answers[question.id]}
+              onChange={(e) => handleChange(question.id, e.target.value)}
+              rows={4}
+              className="form-textarea"
+              placeholder={question.placeholder}
+            />
+            {errors[question.id] && (
+              <p className="error-message">{errors[question.id]}</p>
+            )}
+          </div>
+        ))}
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            Generate My Review
-          </button>
-        </form>
-      </div>
+        <button type="submit" className="btn btn-primary">
+          Generate My Review
+        </button>
+      </form>
     </div>
   );
 }

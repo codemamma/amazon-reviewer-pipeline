@@ -6,6 +6,7 @@ import SuccessScreen from './components/SuccessScreen';
 import ProgressIndicator from './components/ProgressIndicator';
 import { generateReview } from './utils/reviewGenerator';
 import { supabase } from './lib/supabase';
+import './App.css';
 
 function App() {
   const [step, setStep] = useState(1);
@@ -75,8 +76,8 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="app-container">
+      <div className="app-content">
         {step < 4 && <ProgressIndicator currentStep={step} />}
 
         {step === 1 && <EmailCapture onNext={handleEmailSubmit} />}
