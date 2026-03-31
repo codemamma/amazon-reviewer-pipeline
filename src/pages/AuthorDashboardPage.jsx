@@ -105,25 +105,23 @@ export default function AuthorDashboardPage() {
 
   return (
     <div className="app-container">
-      <div className="app-content" style={{ maxWidth: '1200px' }}>
-        <div style={{ marginBottom: '2rem' }}>
+      <div className="app-content max-w-1200">
+        <div className="mb-2">
           <button
             onClick={() => navigate(`/review/${slug}`)}
-            className="btn-text"
-            style={{ marginBottom: '1rem' }}
+            className="btn-text mb-1.5"
           >
             ← Back to Public Page
           </button>
           <h1 className="heading-xl">{author.book_title}</h1>
-          <p className="text-muted" style={{ fontSize: '1.125rem' }}>by {author.author_name}</p>
+          <p className="text-muted text-lg">by {author.author_name}</p>
 
-          <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <div className="flex gap-1 items-center mt-1">
             <input
               type="text"
               value={publicUrl}
               readOnly
-              className="input"
-              style={{ flex: 1, fontSize: '0.875rem' }}
+              className="form-input text-sm"
             />
             <button
               onClick={() => navigator.clipboard.writeText(publicUrl)}
@@ -134,12 +132,7 @@ export default function AuthorDashboardPage() {
           </div>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '1.5rem',
-          marginBottom: '2rem'
-        }}>
+        <div className="stats-grid mb-2">
           <div className="stat-card">
             <div className="stat-value">{stats.totalAttempts}</div>
             <div className="stat-label">Total Readers Engaged</div>
@@ -148,7 +141,7 @@ export default function AuthorDashboardPage() {
           <div className="stat-card">
             <div className="stat-value">{stats.reviewsGenerated}</div>
             <div className="stat-label">Reviews Generated</div>
-            <div style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '0.25rem' }}>
+            <div className="stat-sublabel">
               {generatedRate}% of total
             </div>
           </div>
@@ -156,7 +149,7 @@ export default function AuthorDashboardPage() {
           <div className="stat-card">
             <div className="stat-value">{stats.copied}</div>
             <div className="stat-label">Reviews Copied</div>
-            <div style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '0.25rem' }}>
+            <div className="stat-sublabel">
               {copiedRate}% conversion
             </div>
           </div>
@@ -164,102 +157,91 @@ export default function AuthorDashboardPage() {
           <div className="stat-card">
             <div className="stat-value">{stats.clickedAmazon}</div>
             <div className="stat-label">Amazon Clicks</div>
-            <div style={{ fontSize: '0.875rem', color: '#6b7280', marginTop: '0.25rem' }}>
+            <div className="stat-sublabel">
               {amazonClickRate}% clicked through
             </div>
           </div>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '1.5rem',
-          marginBottom: '2rem'
-        }}>
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', fontWeight: '700', color: generatedRate >= 80 ? '#10b981' : generatedRate >= 50 ? '#f59e0b' : '#6b7280' }}>
+        <div className="metrics-grid mb-2">
+          <div className="card text-center">
+            <div className="metric-value" style={{ color: generatedRate >= 80 ? '#10b981' : generatedRate >= 50 ? '#f59e0b' : '#6b7280' }}>
               {generatedRate}%
             </div>
             <div className="stat-label">Generation Rate</div>
-            <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem' }}>
+            <div className="metric-status">
               {generatedRate >= 80 ? '🟢 Strong' : generatedRate >= 50 ? '🟡 Good' : '🔴 Needs work'}
             </div>
           </div>
 
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', fontWeight: '700', color: copiedRate >= 80 ? '#10b981' : copiedRate >= 50 ? '#f59e0b' : '#6b7280' }}>
+          <div className="card text-center">
+            <div className="metric-value" style={{ color: copiedRate >= 80 ? '#10b981' : copiedRate >= 50 ? '#f59e0b' : '#6b7280' }}>
               {copiedRate}%
             </div>
             <div className="stat-label">Copy Rate</div>
-            <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem' }}>
+            <div className="metric-status">
               {copiedRate >= 80 ? '🟢 Strong' : copiedRate >= 50 ? '🟡 Good' : '🔴 Needs work'}
             </div>
           </div>
 
-          <div className="card" style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '2rem', fontWeight: '700', color: amazonClickRate >= 80 ? '#10b981' : amazonClickRate >= 50 ? '#f59e0b' : '#6b7280' }}>
+          <div className="card text-center">
+            <div className="metric-value" style={{ color: amazonClickRate >= 80 ? '#10b981' : amazonClickRate >= 50 ? '#f59e0b' : '#6b7280' }}>
               {amazonClickRate}%
             </div>
             <div className="stat-label">Amazon Click Rate</div>
-            <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.5rem' }}>
+            <div className="metric-status">
               {amazonClickRate >= 80 ? '🟢 Strong' : amazonClickRate >= 50 ? '🟡 Good' : '🔴 Needs work'}
             </div>
           </div>
         </div>
 
         <div className="card">
-          <h2 className="heading-lg" style={{ marginBottom: '1.5rem' }}>Recent Reader Submissions</h2>
+          <h2 className="heading-lg mb-1.5">Recent Reader Submissions</h2>
 
           {stats.recentAttempts.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📚</div>
+            <div className="empty-state">
+              <div className="empty-icon">📚</div>
               <p className="text-muted">No submissions yet</p>
-              <p className="text-sm text-muted" style={{ marginTop: '0.5rem' }}>
+              <p className="text-sm text-muted mt-0.5">
                 Share your public review page to start collecting reader feedback
               </p>
             </div>
           ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <div className="table-container">
+              <table className="reviews-table">
                 <thead>
-                  <tr style={{ borderBottom: '2px solid #e5e7eb' }}>
-                    <th style={{ padding: '0.75rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#6b7280' }}>Email</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#6b7280' }}>Takeaway</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#6b7280' }}>Recommendation</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#6b7280' }}>Generated</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#6b7280' }}>Copied</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#6b7280' }}>Amazon</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#6b7280' }}>Date</th>
+                  <tr>
+                    <th>Email</th>
+                    <th>Takeaway</th>
+                    <th>Recommendation</th>
+                    <th className="text-center">Generated</th>
+                    <th className="text-center">Copied</th>
+                    <th className="text-center">Amazon</th>
+                    <th>Date</th>
                   </tr>
                 </thead>
                 <tbody>
                   {stats.recentAttempts.map((attempt) => (
-                    <tr key={attempt.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                      <td style={{ padding: '0.75rem', fontSize: '0.875rem' }}>{attempt.email}</td>
-                      <td style={{ padding: '0.75rem', fontSize: '0.875rem', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {attempt.takeaway}
-                      </td>
-                      <td style={{ padding: '0.75rem', fontSize: '0.875rem', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {attempt.recommendation}
-                      </td>
-                      <td style={{ padding: '0.75rem', textAlign: 'center' }}>
+                    <tr key={attempt.id}>
+                      <td>{attempt.email}</td>
+                      <td className="table-truncate">{attempt.takeaway}</td>
+                      <td className="table-truncate">{attempt.recommendation}</td>
+                      <td className="text-center">
                         <span className={`badge ${attempt.review_generated ? 'badge-success' : 'badge-default'}`}>
                           {attempt.review_generated ? 'Yes' : 'No'}
                         </span>
                       </td>
-                      <td style={{ padding: '0.75rem', textAlign: 'center' }}>
+                      <td className="text-center">
                         <span className={`badge ${attempt.copied ? 'badge-success' : 'badge-default'}`}>
                           {attempt.copied ? 'Yes' : 'No'}
                         </span>
                       </td>
-                      <td style={{ padding: '0.75rem', textAlign: 'center' }}>
+                      <td className="text-center">
                         <span className={`badge ${attempt.clicked_amazon ? 'badge-success' : 'badge-default'}`}>
                           {attempt.clicked_amazon ? 'Yes' : 'No'}
                         </span>
                       </td>
-                      <td style={{ padding: '0.75rem', fontSize: '0.875rem' }}>
-                        {new Date(attempt.created_at).toLocaleDateString()}
-                      </td>
+                      <td>{new Date(attempt.created_at).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>

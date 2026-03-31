@@ -113,21 +113,20 @@ ${formData.authorName}`;
       <div className="app-container">
         <div className="app-content">
           <div className="card card-wide">
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎉</div>
+            <div className="text-center mb-2">
+              <div className="heading-xl mb-1.5">🎉</div>
               <h1 className="heading-xl">Your Review Funnel is Live!</h1>
               <p className="text-muted">Share this link with your readers</p>
             </div>
 
-            <div style={{ marginBottom: '2rem' }}>
-              <label className="label">Public Review Page</label>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div className="form-group">
+              <label className="form-label">Public Review Page</label>
+              <div className="flex gap-1">
                 <input
                   type="text"
                   value={publicUrl}
                   readOnly
-                  className="input"
-                  style={{ flex: 1 }}
+                  className="form-input"
                 />
                 <button
                   onClick={() => navigator.clipboard.writeText(publicUrl)}
@@ -138,15 +137,14 @@ ${formData.authorName}`;
               </div>
             </div>
 
-            <div style={{ marginBottom: '2rem' }}>
-              <label className="label">Dashboard</label>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div className="form-group">
+              <label className="form-label">Dashboard</label>
+              <div className="flex gap-1">
                 <input
                   type="text"
                   value={dashboardUrl}
                   readOnly
-                  className="input"
-                  style={{ flex: 1 }}
+                  className="form-input"
                 />
                 <button
                   onClick={() => navigate(`/dashboard/${createdSlug}`)}
@@ -157,37 +155,33 @@ ${formData.authorName}`;
               </div>
             </div>
 
-            <div style={{ marginBottom: '2rem' }}>
-              <label className="label">Suggested LinkedIn Post</label>
+            <div className="form-group">
+              <label className="form-label">Suggested LinkedIn Post</label>
               <textarea
                 value={linkedInPost}
                 readOnly
-                className="textarea"
+                className="form-textarea"
                 rows="8"
-                style={{ fontFamily: 'inherit' }}
               />
               <button
                 onClick={() => navigator.clipboard.writeText(linkedInPost)}
-                className="btn btn-secondary"
-                style={{ marginTop: '0.5rem' }}
+                className="btn btn-secondary mt-0.5"
               >
                 Copy LinkedIn Post
               </button>
             </div>
 
-            <div style={{ marginBottom: '2rem' }}>
-              <label className="label">Suggested Email Copy</label>
+            <div className="form-group">
+              <label className="form-label">Suggested Email Copy</label>
               <textarea
                 value={emailCopy}
                 readOnly
-                className="textarea"
+                className="form-textarea"
                 rows="12"
-                style={{ fontFamily: 'inherit' }}
               />
               <button
                 onClick={() => navigator.clipboard.writeText(emailCopy)}
-                className="btn btn-secondary"
-                style={{ marginTop: '0.5rem' }}
+                className="btn btn-secondary mt-0.5"
               >
                 Copy Email Template
               </button>
@@ -217,107 +211,106 @@ ${formData.authorName}`;
     <div className="app-container">
       <div className="app-content">
         <div className="card card-wide">
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div className="text-center mb-2">
             <h1 className="heading-xl">Create Your Review Funnel</h1>
             <p className="text-muted">Set up a shareable page for your readers to submit reviews</p>
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label className="label">Author Name *</label>
+            <div className="form-group">
+              <label className="form-label">Author Name *</label>
               <input
                 type="text"
                 name="authorName"
                 value={formData.authorName}
                 onChange={handleChange}
-                className="input"
+                className="form-input"
                 required
                 placeholder="John Doe"
               />
             </div>
 
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label className="label">Book Title *</label>
+            <div className="form-group">
+              <label className="form-label">Book Title *</label>
               <input
                 type="text"
                 name="bookTitle"
                 value={formData.bookTitle}
                 onChange={handleChange}
-                className="input"
+                className="form-input"
                 required
                 placeholder="The Art of Writing"
               />
             </div>
 
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label className="label">Amazon Review Link *</label>
+            <div className="form-group">
+              <label className="form-label">Amazon Review Link *</label>
               <input
                 type="url"
                 name="amazonReviewLink"
                 value={formData.amazonReviewLink}
                 onChange={handleChange}
-                className="input"
+                className="form-input"
                 required
                 placeholder="https://amazon.com/review/create-review"
               />
-              <p className="text-sm text-muted" style={{ marginTop: '0.25rem' }}>
+              <p className="text-sm text-muted mt-0.25">
                 The URL where readers can post their review on Amazon
               </p>
             </div>
 
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label className="label">Support Message (Optional)</label>
+            <div className="form-group">
+              <label className="form-label">Support Message (Optional)</label>
               <textarea
                 name="supportMessage"
                 value={formData.supportMessage}
                 onChange={handleChange}
-                className="textarea"
+                className="form-textarea"
                 rows="3"
                 placeholder="Thank you for taking the time to share your thoughts!"
               />
             </div>
 
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label className="label">Brand Color (Optional)</label>
-              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <div className="form-group">
+              <label className="form-label">Brand Color (Optional)</label>
+              <div className="flex gap-1 items-center">
                 <input
                   type="color"
                   name="brandColor"
                   value={formData.brandColor}
                   onChange={handleChange}
-                  style={{ width: '60px', height: '40px', border: '1px solid #e5e7eb', borderRadius: '6px' }}
+                  className="color-picker"
                 />
                 <input
                   type="text"
                   name="brandColor"
                   value={formData.brandColor}
                   onChange={handleChange}
-                  className="input"
+                  className="form-input"
                   placeholder="#3b82f6"
-                  style={{ flex: 1 }}
                 />
               </div>
             </div>
 
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label className="label">URL Slug</label>
+            <div className="form-group">
+              <label className="form-label">URL Slug</label>
               <input
                 type="text"
                 name="slug"
                 value={formData.slug}
                 onChange={handleChange}
-                className="input"
+                className="form-input"
                 required
                 placeholder="author-name-book-title"
               />
-              <p className="text-sm text-muted" style={{ marginTop: '0.25rem' }}>
+              <p className="text-sm text-muted mt-0.25">
                 Your public page will be at: /review/{formData.slug || 'your-slug'}
               </p>
             </div>
 
             {error && (
-              <div className="info-box" style={{ marginBottom: '1.5rem', backgroundColor: '#fef2f2', borderColor: '#fecaca' }}>
-                <p className="text-sm" style={{ color: '#dc2626' }}>{error}</p>
+              <div className="error-box mb-1.5">
+                <p className="text-sm">{error}</p>
               </div>
             )}
 
@@ -325,7 +318,6 @@ ${formData.authorName}`;
               type="submit"
               className="btn btn-primary"
               disabled={loading}
-              style={{ width: '100%' }}
             >
               {loading ? 'Creating...' : 'Create My Review Funnel'}
             </button>

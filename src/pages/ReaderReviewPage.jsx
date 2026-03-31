@@ -160,88 +160,77 @@ export default function ReaderReviewPage() {
   const brandColor = author.brand_color || '#3b82f6';
 
   return (
-    <div className="app-container">
-      <style>
-        {`
-          .btn-primary {
-            background-color: ${brandColor};
-            border-color: ${brandColor};
-          }
-          .btn-primary:hover {
-            opacity: 0.9;
-          }
-        `}
-      </style>
+    <div className="app-container" style={{ '--brand-color': brandColor }}>
       <div className="app-content">
         {step === 1 && (
           <>
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-              <div style={{ display: 'inline-block', padding: '0.5rem 1rem', backgroundColor: '#f3f4f6', borderRadius: '9999px', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#6b7280' }}>Step 1 of 2</span>
+            <div className="text-center mb-2">
+              <div className="step-badge">
+                <span className="text-sm">Step 1 of 2</span>
               </div>
             </div>
 
             <div className="card card-wide">
-              <h1 className="heading-xl" style={{ textAlign: 'center' }}>
+              <h1 className="heading-xl text-center">
                 Support {author.author_name} by sharing your thoughts on {author.book_title}
               </h1>
-              <p className="text-muted" style={{ textAlign: 'center', fontSize: '1.125rem', marginBottom: '2rem' }}>
+              <p className="text-muted text-center text-lg mb-2">
                 Answer 3 quick prompts and we'll help you draft an Amazon-ready review you can copy and post.
               </p>
 
               {author.support_message && (
-                <div className="info-box" style={{ marginBottom: '2rem' }}>
+                <div className="info-box mb-2">
                   <p className="text-sm">{author.support_message}</p>
                 </div>
               )}
 
               <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <label className="label">Your Email *</label>
+                <div className="form-group">
+                  <label className="form-label">Your Email *</label>
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="input"
+                    className="form-input"
                     required
                     placeholder="you@example.com"
                   />
                 </div>
 
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <label className="label">What was your biggest takeaway from the book? *</label>
+                <div className="form-group">
+                  <label className="form-label">What was your biggest takeaway from the book? *</label>
                   <textarea
                     name="takeaway"
                     value={formData.takeaway}
                     onChange={handleChange}
-                    className="textarea"
+                    className="form-textarea"
                     rows="4"
                     required
                     placeholder="The main insight or lesson that resonated with you..."
                   />
                 </div>
 
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <label className="label">Who would you recommend this book to? *</label>
+                <div className="form-group">
+                  <label className="form-label">Who would you recommend this book to? *</label>
                   <textarea
                     name="recommendation"
                     value={formData.recommendation}
                     onChange={handleChange}
-                    className="textarea"
+                    className="form-textarea"
                     rows="3"
                     required
                     placeholder="The type of reader who would benefit most from this book..."
                   />
                 </div>
 
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <label className="label">What stood out most? *</label>
+                <div className="form-group">
+                  <label className="form-label">What stood out most? *</label>
                   <textarea
                     name="standout"
                     value={formData.standout}
                     onChange={handleChange}
-                    className="textarea"
+                    className="form-textarea"
                     rows="3"
                     required
                     placeholder="A specific moment, chapter, or aspect that impressed you..."
@@ -252,7 +241,6 @@ export default function ReaderReviewPage() {
                   type="submit"
                   className="btn btn-primary"
                   disabled={submitting}
-                  style={{ width: '100%' }}
                 >
                   {submitting ? 'Generating Your Review...' : 'Generate My Review'}
                 </button>
@@ -263,20 +251,20 @@ export default function ReaderReviewPage() {
 
         {step === 2 && review && (
           <>
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-              <div style={{ display: 'inline-block', padding: '0.5rem 1rem', backgroundColor: '#f3f4f6', borderRadius: '9999px', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#6b7280' }}>Step 2 of 2</span>
+            <div className="text-center mb-2">
+              <div className="step-badge">
+                <span className="text-sm">Step 2 of 2</span>
               </div>
             </div>
 
             <div className="card card-wide">
-              <h2 className="heading-lg" style={{ textAlign: 'center' }}>Your Review is Ready</h2>
-              <p className="text-muted" style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <h2 className="heading-lg text-center">Your Review is Ready</h2>
+              <p className="text-muted text-center mb-2">
                 Copy and paste this into Amazon
               </p>
 
-              <div style={{ marginBottom: '2rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <div className="mb-2">
+                <div className="review-display-header">
                   <h3 className="heading-md">
                     {showLong ? 'Long Review' : 'Short Review (Recommended)'}
                   </h3>
@@ -287,21 +275,14 @@ export default function ReaderReviewPage() {
                     {showLong ? 'Show Short' : 'Show Long'}
                   </button>
                 </div>
-                <div style={{
-                  padding: '1.5rem',
-                  backgroundColor: '#f9fafb',
-                  borderRadius: '8px',
-                  border: '1px solid #e5e7eb',
-                  lineHeight: '1.7',
-                  fontSize: '1rem'
-                }}>
-                  <p style={{ whiteSpace: 'pre-wrap', margin: 0, color: '#1f2937' }}>
+                <div className="review-display">
+                  <p className="review-text">
                     {showLong ? review.longReview : review.shortReview}
                   </p>
                 </div>
               </div>
 
-              <div className="btn-group" style={{ marginBottom: '1.5rem' }}>
+              <div className="btn-group mb-1.5">
                 <button
                   onClick={() => handleCopy(showLong ? review.longReview : review.shortReview)}
                   className="btn btn-secondary"
@@ -318,15 +299,15 @@ export default function ReaderReviewPage() {
               </div>
 
               <div className="info-box">
-                <p className="text-sm" style={{ marginBottom: '0.5rem' }}>
+                <p className="text-sm mb-0.5">
                   <strong>Next:</strong> Paste this into your Amazon review
                 </p>
-                <p className="text-sm" style={{ color: '#6b7280' }}>
+                <p className="text-sm text-muted">
                   You can edit the wording before posting. This is just a helpful starting point. Takes 30 seconds.
                 </p>
               </div>
 
-              <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid #e5e7eb' }}>
+              <div className="divider">
                 <p className="text-sm text-muted">
                   Thank you for supporting {author.author_name}!
                 </p>
