@@ -295,7 +295,7 @@ export default function ReaderReviewPage() {
                   lineHeight: '1.7',
                   fontSize: '1rem'
                 }}>
-                  <p style={{ whiteSpace: 'pre-wrap', margin: 0 }}>
+                  <p style={{ whiteSpace: 'pre-wrap', margin: 0, color: '#1f2937' }}>
                     {showLong ? review.longReview : review.shortReview}
                   </p>
                 </div>
