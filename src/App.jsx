@@ -4,11 +4,14 @@ import GuidedQuestions from './components/GuidedQuestions';
 import ReviewDisplay from './components/ReviewDisplay';
 import SuccessScreen from './components/SuccessScreen';
 import ProgressIndicator from './components/ProgressIndicator';
+import Dashboard from './components/Dashboard';
 import { generateReview } from './utils/reviewGenerator';
 import { supabase } from './lib/supabase';
 import './App.css';
+import './components/Dashboard.css';
 
 function App() {
+  const [view, setView] = useState('review');
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState('');
   const [answers, setAnswers] = useState(null);
@@ -78,22 +81,44 @@ function App() {
   return (
     <div className="app-container">
       <div className="app-content">
-        {step < 4 && <ProgressIndicator currentStep={step} />}
+        <nav style={{ marginBottom: '2rem', textAlign: 'center' }}>
+          <button
+            onClick={() => setView('review')}
+            className={view === 'review' ? 'nav-link' : 'btn-text'}
+            style={{ marginRight: '1rem' }}
+          >
+            Create Review
+          </button>
+          <button
+            onClick={() => setView('dashboard')}
+            className={view === 'dashboard' ? 'nav-link' : 'btn-text'}
+          >
+            Dashboard
+          </button>
+        </nav>
 
-        {step === 1 && <EmailCapture onNext={handleEmailSubmit} />}
+        {view === 'dashboard' ? (
+          <Dashboard />
+        ) : (
+          <>
+            {step < 4 && <ProgressIndicator currentStep={step} />}
 
-        {step === 2 && <GuidedQuestions email={email} onNext={handleQuestionsSubmit} />}
+            {step === 1 && <EmailCapture onNext={handleEmailSubmit} />}
 
-        {step === 3 && review && (
-          <ReviewDisplay
-            shortReview={review.shortReview}
-            longReview={review.longReview}
-            onCopy={handleCopy}
-            onNext={handleNext}
-          />
+            {step === 2 && <GuidedQuestions email={email} onNext={handleQuestionsSubmit} />}
+
+            {step === 3 && review && (
+              <ReviewDisplay
+                shortReview={review.shortReview}
+                longReview={review.longReview}
+                onCopy={handleCopy}
+                onNext={handleNext}
+              />
+            )}
+
+            {step === 4 && <SuccessScreen />}
+          </>
         )}
-
-        {step === 4 && <SuccessScreen />}
       </div>
     </div>
   );
