@@ -114,13 +114,13 @@ export default function ReaderReviewPage() {
   };
 
   const handleCopyAndOpenAmazon = async () => {
-    await handleCopy(review.shortReview);
+    await handleCopy(showLong ? review.longReview : review.shortReview);
 
     if (attemptId) {
       try {
         await supabase
           .from('review_attempts')
-          .update({ clicked_amazon: true })
+          .update({ clicked_amazon: true, amazon_link_used: true })
           .eq('id', attemptId);
       } catch (err) {
         console.error('Error updating Amazon click status:', err);
