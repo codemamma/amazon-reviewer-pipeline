@@ -78,6 +78,19 @@ function App() {
     setStep(4);
   };
 
+  const handleAmazonLinkClick = async () => {
+    if (attemptId) {
+      try {
+        await supabase
+          .from('review_attempts')
+          .update({ amazon_link_used: true })
+          .eq('id', attemptId);
+      } catch (err) {
+        console.error('Error updating Amazon link status:', err);
+      }
+    }
+  };
+
   return (
     <div className="app-container">
       <div className="app-content">
@@ -113,6 +126,7 @@ function App() {
                 longReview={review.longReview}
                 onCopy={handleCopy}
                 onNext={handleNext}
+                onAmazonLinkClick={handleAmazonLinkClick}
               />
             )}
 

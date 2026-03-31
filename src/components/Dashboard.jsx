@@ -5,6 +5,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState({
     totalReviews: 0,
     copiedReviews: 0,
+    amazonLinkUsed: 0,
     recentReviews: []
   });
   const [loading, setLoading] = useState(true);
@@ -24,11 +25,13 @@ export default function Dashboard() {
 
       const totalReviews = reviews?.filter(r => r.review_generated).length || 0;
       const copiedReviews = reviews?.filter(r => r.copied).length || 0;
+      const amazonLinkUsed = reviews?.filter(r => r.amazon_link_used).length || 0;
       const recentReviews = reviews?.slice(0, 10) || [];
 
       setStats({
         totalReviews,
         copiedReviews,
+        amazonLinkUsed,
         recentReviews
       });
     } catch (error) {
@@ -69,6 +72,11 @@ export default function Dashboard() {
         </div>
 
         <div className="stat-card">
+          <div className="stat-value">{stats.amazonLinkUsed}</div>
+          <div className="stat-label">Amazon Link Clicked</div>
+        </div>
+
+        <div className="stat-card">
           <div className="stat-value">{conversionRate}%</div>
           <div className="stat-label">Copy Rate</div>
         </div>
@@ -88,6 +96,7 @@ export default function Dashboard() {
                   <th>Date</th>
                   <th>Generated</th>
                   <th>Copied</th>
+                  <th>Amazon Link</th>
                 </tr>
               </thead>
               <tbody>
@@ -103,6 +112,11 @@ export default function Dashboard() {
                     <td>
                       <span className={`badge ${review.copied ? 'badge-success' : 'badge-default'}`}>
                         {review.copied ? 'Yes' : 'No'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`badge ${review.amazon_link_used ? 'badge-success' : 'badge-default'}`}>
+                        {review.amazon_link_used ? 'Yes' : 'No'}
                       </span>
                     </td>
                   </tr>

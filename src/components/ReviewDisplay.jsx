@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function ReviewDisplay({ shortReview, longReview, onCopy, onNext }) {
+export default function ReviewDisplay({ shortReview, longReview, onCopy, onNext, onAmazonLinkClick }) {
   const [copied, setCopied] = useState(false);
   const [showLong, setShowLong] = useState(false);
 
@@ -20,6 +20,12 @@ export default function ReviewDisplay({ shortReview, longReview, onCopy, onNext 
     setTimeout(() => {
       onNext();
     }, 500);
+  };
+
+  const handleAmazonLinkClick = () => {
+    if (onAmazonLinkClick) {
+      onAmazonLinkClick();
+    }
   };
 
   return (
@@ -71,6 +77,7 @@ export default function ReviewDisplay({ shortReview, longReview, onCopy, onNext 
           target="_blank"
           rel="noopener noreferrer"
           className="text-sm"
+          onClick={handleAmazonLinkClick}
         >
           amazon.com/review/create-review
         </a>
