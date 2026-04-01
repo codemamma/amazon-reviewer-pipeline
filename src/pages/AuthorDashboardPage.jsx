@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { verifyPassword } from '../utils/passwordHash';
 
 export default function AuthorDashboardPage() {
   const { slug } = useParams();
@@ -14,12 +15,15 @@ export default function AuthorDashboardPage() {
     recentAttempts: []
   });
   const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchData();
+    checkAuth();
   }, [slug]);
 
-  const fetchData = async () => {
+  const checkAuth = async () => {
     try {
       const { data: authorData, error: authorError } = await supabase
         .from('authors')
@@ -36,6 +40,52 @@ export default function AuthorDashboardPage() {
       }
 
       setAuthor(authorData);
+
+      const authKey = `dashboard_auth_${slug}`;
+      const savedAuth = sessionStorage.getItem(authKey);
+
+      if (savedAuth) {
+        setAuthenticated(true);
+        fetchData(authorData);
+      } else {
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error('Error checking auth:', err);
+      setLoading(false);
+    }
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const isValid = await verifyPassword(password, author.password_hash);
+
+      if (isValid) {
+        const authKey = `dashboard_auth_${slug}`;
+        sessionStorage.setItem(authKey, 'true');
+        setAuthenticated(true);
+        await fetchData(author);
+      } else {
+        setError('Incorrect password');
+        setLoading(false);
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+      console.error('Login error:', err);
+      setLoading(false);
+    }
+  };
+
+  const fetchData = async (authorData) => {
+    try {
+      await supabase
+        .from('authors')
+        .update({ last_accessed_at: new Date().toISOString() })
+        .eq('id', authorData.id);
 
       const { data: attempts, error: attemptsError } = await supabase
         .from('review_attempts')
@@ -83,6 +133,59 @@ export default function AuthorDashboardPage() {
           <div className="card">
             <h1 className="heading-lg">Dashboard Not Found</h1>
             <p className="text-muted">This author page does not exist.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!authenticated) {
+    return (
+      <div className="app-container">
+        <div className="app-content">
+          <div className="card max-w-500">
+            <div className="text-center mb-2">
+              <h1 className="heading-xl">Dashboard Login</h1>
+              <p className="text-muted">{author.book_title}</p>
+              <p className="text-sm text-muted">by {author.author_name}</p>
+            </div>
+
+            <form onSubmit={handleLogin}>
+              <div className="form-group">
+                <label className="form-label">Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="form-input"
+                  required
+                  placeholder="Enter your dashboard password"
+                  autoFocus
+                />
+              </div>
+
+              {error && (
+                <div className="error-box mb-1.5">
+                  <p className="text-sm">{error}</p>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="btn btn-primary"
+              >
+                Access Dashboard
+              </button>
+            </form>
+
+            <div className="text-center mt-2">
+              <button
+                onClick={() => navigate('/my-funnels')}
+                className="btn-text"
+              >
+                View All My Funnels
+              </button>
+            </div>
           </div>
         </div>
       </div>

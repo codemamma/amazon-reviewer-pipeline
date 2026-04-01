@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
+import { hashPassword } from '../utils/passwordHash';
 
 export default function AuthorSetupPage() {
   const navigate = useNavigate();
@@ -11,7 +12,10 @@ export default function AuthorSetupPage() {
     amazonReviewLink: '',
     supportMessage: '',
     brandColor: '#3b82f6',
-    slug: ''
+    slug: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
   });
   const [error, setError] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
@@ -47,7 +51,22 @@ export default function AuthorSetupPage() {
     setLoading(true);
 
     try {
+      // Validate password match
+      if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match');
+        setLoading(false);
+        return;
+      }
+
+      // Validate password length
+      if (formData.password.length < 6) {
+        setError('Password must be at least 6 characters');
+        setLoading(false);
+        return;
+      }
+
       const finalSlug = formData.slug || generateSlug(formData.authorName, formData.bookTitle);
+      const passwordHash = await hashPassword(formData.password);
 
       const { data, error: insertError } = await supabase
         .from('authors')
@@ -57,19 +76,48 @@ export default function AuthorSetupPage() {
           amazon_review_link: formData.amazonReviewLink,
           support_message: formData.supportMessage || null,
           brand_color: formData.brandColor || null,
-          slug: finalSlug
+          slug: finalSlug,
+          email: formData.email,
+          password_hash: passwordHash
         })
         .select()
         .maybeSingle();
 
       if (insertError) {
         if (insertError.code === '23505') {
-          setError('This slug already exists. Please choose a different one.');
+          if (insertError.message.includes('email')) {
+            setError('This email is already registered. Please use a different email or visit "My Funnels" to log in.');
+          } else {
+            setError('This slug already exists. Please choose a different one.');
+          }
         } else {
           setError(insertError.message);
         }
         setLoading(false);
         return;
+      }
+
+      // Send dashboard email
+      try {
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const dashboardUrl = `${window.location.origin}/dashboard/${finalSlug}`;
+        const publicUrl = `${window.location.origin}/review/${finalSlug}`;
+
+        await fetch(`${supabaseUrl}/functions/v1/send-dashboard-email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            authorName: formData.authorName,
+            bookTitle: formData.bookTitle,
+            dashboardUrl,
+            publicUrl
+          })
+        });
+      } catch (emailError) {
+        console.error('Failed to send email:', emailError);
       }
 
       setCreatedSlug(finalSlug);
@@ -116,7 +164,7 @@ ${formData.authorName}`;
             <div className="text-center mb-2">
               <div className="heading-xl mb-1.5">🎉</div>
               <h1 className="heading-xl">Your Review Funnel is Live!</h1>
-              <p className="text-muted">Share this link with your readers</p>
+              <p className="text-muted">Dashboard link sent to {formData.email}</p>
             </div>
 
             <div className="form-group">
@@ -257,6 +305,53 @@ ${formData.authorName}`;
               <p className="text-sm text-muted mt-0.25">
                 The URL where readers can post their review on Amazon
               </p>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Email *</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="form-input"
+                required
+                placeholder="author@example.com"
+              />
+              <p className="text-sm text-muted mt-0.25">
+                We'll email you the dashboard link and use this for login
+              </p>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Password *</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="form-input"
+                required
+                placeholder="At least 6 characters"
+                minLength="6"
+              />
+              <p className="text-sm text-muted mt-0.25">
+                Protect your dashboard with a password
+              </p>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Confirm Password *</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                className="form-input"
+                required
+                placeholder="Re-enter your password"
+                minLength="6"
+              />
             </div>
 
             <div className="form-group">
