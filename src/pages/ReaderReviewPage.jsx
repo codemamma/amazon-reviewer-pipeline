@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { generateReview } from '../utils/multiAuthorReviewGenerator';
 
 export default function ReaderReviewPage() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState(1);
@@ -148,9 +149,15 @@ export default function ReaderReviewPage() {
     return (
       <div className="app-container">
         <div className="app-content">
-          <div className="card">
+          <div className="card text-center">
             <h1 className="heading-lg">Review Funnel Not Found</h1>
             <p className="text-muted">This review page does not exist.</p>
+            <button
+              onClick={() => navigate('/')}
+              className="btn btn-primary mt-1.5"
+            >
+              Create Your Own Funnel
+            </button>
           </div>
         </div>
       </div>
@@ -164,10 +171,16 @@ export default function ReaderReviewPage() {
       <div className="app-content">
         {step === 1 && (
           <>
-            <div className="text-center mb-2">
+            <div className="flex items-center justify-between mb-2">
               <div className="step-badge">
                 <span className="text-sm">Step 1 of 2</span>
               </div>
+              <button
+                onClick={() => navigate('/')}
+                className="btn-text text-sm"
+              >
+                Create Your Own Funnel
+              </button>
             </div>
 
             <div className="card card-wide">
@@ -251,10 +264,16 @@ export default function ReaderReviewPage() {
 
         {step === 2 && review && (
           <>
-            <div className="text-center mb-2">
+            <div className="flex items-center justify-between mb-2">
               <div className="step-badge">
                 <span className="text-sm">Step 2 of 2</span>
               </div>
+              <button
+                onClick={() => navigate('/')}
+                className="btn-text text-sm"
+              >
+                Create Your Own Funnel
+              </button>
             </div>
 
             <div className="card card-wide">

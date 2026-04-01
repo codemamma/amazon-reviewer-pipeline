@@ -243,6 +243,12 @@ ${formData.authorName}`;
                 View Public Page
               </button>
               <button
+                onClick={() => navigate('/my-funnels')}
+                className="btn btn-secondary"
+              >
+                View All My Funnels
+              </button>
+              <button
                 onClick={() => window.location.reload()}
                 className="btn btn-text"
               >
@@ -262,6 +268,14 @@ ${formData.authorName}`;
           <div className="text-center mb-2">
             <h1 className="heading-xl">Create Your Review Funnel</h1>
             <p className="text-muted">Set up a shareable page for your readers to submit reviews</p>
+            <div className="mt-1">
+              <button
+                onClick={() => navigate('/my-funnels')}
+                className="btn-text"
+              >
+                View My Existing Funnels
+              </button>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit}>
