@@ -2,8 +2,9 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
 interface EmailRequest {
@@ -14,11 +15,11 @@ interface EmailRequest {
   publicUrl: string;
 }
 
-Deno.serve(async (req: Request) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, {
-      status: 200,
+    return new Response("ok", { 
       headers: corsHeaders,
+      status: 200,
     });
   }
 
@@ -75,32 +76,30 @@ Review Assistant Team`
     // });
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Email notification prepared (integration pending)',
-        emailPreview: emailContent
-      }),
+      JSON.stringify({success: true}),
+        //message: 'Email notification prepared (integration pending)',
+        //emailPreview: emailContent
+      //}),
       {
         headers: {
           ...corsHeaders,
           'Content-Type': 'application/json',
         },
+        status:200,
       }
     );
-  } catch (error) {
-    console.error('Error in send-dashboard-email:', error);
+  } catch (err) {
+    //console.error('Error in send-dashboard-email:', error);
 
     return new Response(
-      JSON.stringify({
-        error: error.message,
-        success: false
-      }),
+      JSON.stringify({error: err.message,}),
       {
-        status: 500,
+        //status: 500,
         headers: {
           ...corsHeaders,
           'Content-Type': 'application/json',
         },
+        status:500,
       }
     );
   }

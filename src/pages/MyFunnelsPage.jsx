@@ -21,34 +21,31 @@ export default function MyFunnelsPage() {
       const { data: authorData, error: authorError } = await supabase
         .from('authors')
         .select('*')
-        .eq('email', email)
-        .maybeSingle();
+        .eq('email', email);
 
       if (authorError) throw authorError;
 
-      if (!authorData) {
+      if (!authorData || authorData.length === 0) {
         setError('No account found with this email');
         setLoading(false);
         return;
       }
-
-      const isValid = await verifyPassword(password, authorData.password_hash);
-
-      if (!isValid) {
+      const validFunnels =[];
+      
+      for (const funnel of authorData) {
+        const isValid = await verifyPassword(password, funnel.password_hash);
+        if (isValid) {
+        validFunnels.push(funnel);
+        }
+      }
+      
+      if (validFunnels.length === 0) {
         setError('Incorrect password');
         setLoading(false);
         return;
       }
 
-      const { data: allFunnels, error: funnelsError } = await supabase
-        .from('authors')
-        .select('*')
-        .eq('email', email)
-        .order('created_at', { ascending: false });
-
-      if (funnelsError) throw funnelsError;
-
-      setFunnels(allFunnels || []);
+      setFunnels(validFunnels);
       setAuthenticated(true);
     } catch (err) {
       setError('An error occurred. Please try again.');
